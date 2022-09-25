@@ -39,29 +39,84 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.MakeImageName = exports.processeImage = exports.checkPhotoExistInPublicFolder = void 0;
 var express_1 = __importDefault(require("express"));
 var fs_1 = require("fs");
 var sharp_1 = __importDefault(require("sharp"));
 var app = (0, express_1.default)();
 var port = 3000;
 app.use('/public', express_1.default.static('public'));
+var ProcesseImageRetuenValue = /** @class */ (function () {
+    function ProcesseImageRetuenValue() {
+        this.state = 200;
+        this.text = "Response";
+    }
+    return ProcesseImageRetuenValue;
+}());
+var checkPhotoExistInPublicFolder = function (imageName) { return __awaiter(void 0, void 0, void 0, function () {
+    var images;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, fs_1.promises.readdir('public')];
+            case 1:
+                images = _a.sent();
+                if (images.includes(imageName))
+                    return [2 /*return*/, true];
+                else
+                    return [2 /*return*/, false];
+                return [2 /*return*/];
+        }
+    });
+}); };
+exports.checkPhotoExistInPublicFolder = checkPhotoExistInPublicFolder;
+var processeImage = function (image, imageName, imageSize) { return __awaiter(void 0, void 0, void 0, function () {
+    var returnResponse;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                returnResponse = new ProcesseImageRetuenValue();
+                return [4 /*yield*/, (0, sharp_1.default)(image).resize(imageSize).toFile("public/".concat(imageName))
+                        .then(function () {
+                        returnResponse.state = 200;
+                        returnResponse.text = "<img src=\"http://localhost:".concat(port, "/public/").concat(imageName, "\" />");
+                    }).
+                        catch(function () {
+                        returnResponse.state = 404;
+                        returnResponse.text = "Not found";
+                    })];
+            case 1:
+                _a.sent();
+                return [2 /*return*/, returnResponse];
+        }
+    });
+}); };
+exports.processeImage = processeImage;
+var MakeImageName = function (imageSize, image) {
+    var splitImageName = image.split('.');
+    var imageName = "".concat(splitImageName[0], "_").concat(imageSize, ".").concat(splitImageName[1]);
+    return imageName;
+};
+exports.MakeImageName = MakeImageName;
 app.get('/image/:image/?:size', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var image, size;
+    var image, size, imageSize, imageName, returnResponse;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 image = req.params.image;
                 size = parseInt(req.params.size);
-                return [4 /*yield*/, (0, sharp_1.default)(image).resize((size ? (size < 1000 ? size : 200) : 200)).toFile("public/".concat(image))
-                        .then(function () {
-                        res.send("<img src=\"http://localhost:".concat(port, "/public/").concat(image, "\" />"));
-                    }).
-                        catch(function () {
-                        res.status(404).send("Not found");
-                    })];
+                imageSize = (size ? (size < 1000 ? size : 200) : 200);
+                imageName = (0, exports.MakeImageName)(imageSize, image);
+                return [4 /*yield*/, (0, exports.checkPhotoExistInPublicFolder)(imageName)];
             case 1:
-                _a.sent();
-                return [2 /*return*/];
+                if (!((_a.sent()) === true)) return [3 /*break*/, 2];
+                res.send("<img src=\"http://localhost:".concat(port, "/public/").concat(imageName, "\" />"));
+                return [3 /*break*/, 4];
+            case 2: return [4 /*yield*/, (0, exports.processeImage)(image, imageName, imageSize)];
+            case 3:
+                returnResponse = _a.sent();
+                res.status(returnResponse.state).send(returnResponse.text);
+                _a.label = 4;
+            case 4: return [2 /*return*/];
         }
     });
 }); });
