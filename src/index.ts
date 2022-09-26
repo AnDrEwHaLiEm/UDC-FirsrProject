@@ -39,7 +39,7 @@ export const processeImage = async (image: string, imageName: string, imageSize:
     return returnResponse;
 }
 
-export const MakeImageName = (imageSize: number, image: string):string=>{
+export const MakeImageName = (imageSize: number, image: string): string => {
     const splitImageName = image.split('.');
     const imageName = `${splitImageName[0]}_${imageSize}.${splitImageName[1]}`;
     return imageName;
@@ -48,7 +48,7 @@ export const MakeImageName = (imageSize: number, image: string):string=>{
 app.get('/image/:image/:size', async (req: Request, res: Response): Promise<void> => {
     const image = req.params.image;
     const size = parseInt(req.params.size);
-    const imageSize = (size ? (size < 1000 ? size : 200) : 200);
+    const imageSize = Math.max(50, (size ? (size < 1000 ? size : 200) : 200));
 
     const imageName = MakeImageName(imageSize, image);
 
@@ -67,13 +67,12 @@ app.get('/images', async (req: Request, res: Response): Promise<void> => {
     let response: string = "";
     let stat = 200;
     const countImages = images.length;
-    const sz = 80 / (countImages >= 7 ? 4 : (countImages > 4 ? 3 : 2));
     const mrg = (countImages == 1 ? 30 : 4);
     images.forEach(async element => {
-        response += `<img src="http://localhost:${port}/public/${element}" style="margin-left : ${mrg}% ; margin-top : 5%; min-width:${sz}%" />`;
+        response += `<img src="http://localhost:${port}/public/${element}" style="margin-left : ${mrg}% ; margin-top : 5%;}%" />`;
     });
     if (!response) {
-        response = "there is't any image";
+        response = "there is not any image";
         stat = 404;
     }
     res.status(stat).send(response);
