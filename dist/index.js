@@ -97,7 +97,7 @@ var MakeImageName = function (imageSize, image) {
     return imageName;
 };
 exports.MakeImageName = MakeImageName;
-app.get('/image/:image/?:size', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+app.get('/image/:image/:size', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var image, size, imageSize, imageName, returnResponse;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -134,7 +134,7 @@ app.get('/images', function (req, res) { return __awaiter(void 0, void 0, void 0
                 mrg = (countImages == 1 ? 30 : 4);
                 images.forEach(function (element) { return __awaiter(void 0, void 0, void 0, function () {
                     return __generator(this, function (_a) {
-                        response += "<img src=\"http://localhost:".concat(port, "/public/").concat(element, "\" style=\"margin-left : ").concat(mrg, "% ; margin-top : 5%; max-width:").concat(sz, "%\" />");
+                        response += "<img src=\"http://localhost:".concat(port, "/public/").concat(element, "\" style=\"margin-left : ").concat(mrg, "% ; margin-top : 5%; min-width:").concat(sz, "%\" />");
                         return [2 /*return*/];
                     });
                 }); });

@@ -45,7 +45,7 @@ export const MakeImageName = (imageSize: number, image: string):string=>{
     return imageName;
 }
 
-app.get('/image/:image/?:size', async (req: Request, res: Response): Promise<void> => {
+app.get('/image/:image/:size', async (req: Request, res: Response): Promise<void> => {
     const image = req.params.image;
     const size = parseInt(req.params.size);
     const imageSize = (size ? (size < 1000 ? size : 200) : 200);
