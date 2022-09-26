@@ -104,7 +104,7 @@ app.get('/image/:image/:size', function (req, res) { return __awaiter(void 0, vo
             case 0:
                 image = req.params.image;
                 size = parseInt(req.params.size);
-                imageSize = (size ? (size < 1000 ? size : 200) : 200);
+                imageSize = Math.max(50, (size ? (size < 1000 ? size : 200) : 200));
                 imageName = (0, exports.MakeImageName)(imageSize, image);
                 return [4 /*yield*/, (0, exports.checkPhotoExistInPublicFolder)(imageName)];
             case 1:
@@ -121,7 +121,7 @@ app.get('/image/:image/:size', function (req, res) { return __awaiter(void 0, vo
     });
 }); });
 app.get('/images', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var images, response, stat, countImages, sz, mrg;
+    var images, response, stat, countImages, mrg;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, fs_1.promises.readdir('public')];
@@ -130,16 +130,15 @@ app.get('/images', function (req, res) { return __awaiter(void 0, void 0, void 0
                 response = "";
                 stat = 200;
                 countImages = images.length;
-                sz = 80 / (countImages >= 7 ? 4 : (countImages > 4 ? 3 : 2));
                 mrg = (countImages == 1 ? 30 : 4);
                 images.forEach(function (element) { return __awaiter(void 0, void 0, void 0, function () {
                     return __generator(this, function (_a) {
-                        response += "<img src=\"http://localhost:".concat(port, "/public/").concat(element, "\" style=\"margin-left : ").concat(mrg, "% ; margin-top : 5%; min-width:").concat(sz, "%\" />");
+                        response += "<img src=\"http://localhost:".concat(port, "/public/").concat(element, "\" style=\"margin-left : ").concat(mrg, "% ; margin-top : 5%;}%\" />");
                         return [2 /*return*/];
                     });
                 }); });
                 if (!response) {
-                    response = "there is't any image";
+                    response = "there is not any image";
                     stat = 404;
                 }
                 res.status(stat).send(response);
