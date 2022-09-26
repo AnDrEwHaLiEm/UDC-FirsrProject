@@ -1,3 +1,5 @@
+<pre>
+
 first API
     localhost:3000/image/{imageName}/{imagesize}
     imageName 
@@ -7,5 +9,6 @@ first API
 second API
     localhost:3000/images
     it work without any paramter
+</pre>
 
 
