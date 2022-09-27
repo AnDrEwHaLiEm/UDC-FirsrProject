@@ -1,5 +1,20 @@
 import ImageProcessClass from '../utilities/ImageProcess';
-describe('Image Project', () => {
+import supertest from 'supertest';
+import app from '../index';
+
+const request = supertest(app);
+
+describe('Test endpoint responses', () => {
+  it('Process Image exist', async () => {
+    const response = await request.get('/image/process/fjord.jpg/200');
+    expect(response.status).toEqual(200);
+    expect(response.text).toBe(
+      '<img src="http://localhost:3000/public/fjord_200.jpg" />'
+    );
+  });
+});
+
+describe('Image Process', () => {
   describe('add image', () => {
     it('Image exist in my public folder', async () => {
       const imageProcess = new ImageProcessClass('palmtunnel.jpg', 400);

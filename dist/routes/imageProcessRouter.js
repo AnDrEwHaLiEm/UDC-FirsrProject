@@ -53,14 +53,11 @@ imageRouter.get('/process/:image/:size', function (req, res) { return __awaiter(
                 return [4 /*yield*/, imageProcess.checkPhotoExistInPublicFolder()];
             case 1:
                 if (!((_a.sent()) === true)) return [3 /*break*/, 2];
-                res.send("<img src=\"http://localhost:3000/public/".concat(imageProcess.getImageName(), "\" />"));
-                return [3 /*break*/, 4];
+                return [2 /*return*/, res.send("<img src=\"http://localhost:3000/public/".concat(imageProcess.getImageName(), "\" />"))];
             case 2: return [4 /*yield*/, imageProcess.processeImage()];
             case 3:
                 returnResponse = _a.sent();
-                res.status(returnResponse.state).send(returnResponse.text);
-                _a.label = 4;
-            case 4: return [2 /*return*/];
+                return [2 /*return*/, res.status(returnResponse.state).send(returnResponse.text)];
         }
     });
 }); });
@@ -73,8 +70,7 @@ imageRouter.get('/ShowAll', function (req, res) { return __awaiter(void 0, void 
                 return [4 /*yield*/, imageProcess.showAllImage()];
             case 1:
                 returnResponse = _a.sent();
-                res.status(returnResponse.state).send(returnResponse.text);
-                return [2 /*return*/];
+                return [2 /*return*/, res.status(returnResponse.state).send(returnResponse.text)];
         }
     });
 }); });

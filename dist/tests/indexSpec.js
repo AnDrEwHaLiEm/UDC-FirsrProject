@@ -40,7 +40,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var ImageProcess_1 = __importDefault(require("../utilities/ImageProcess"));
-describe('Image Project', function () {
+var supertest_1 = __importDefault(require("supertest"));
+var index_1 = __importDefault(require("../index"));
+var request = (0, supertest_1.default)(index_1.default);
+describe('Test endpoint responses', function () {
+    it('Process Image exist', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, request.get('/image/process/fjord.jpg/200')];
+                case 1:
+                    response = _a.sent();
+                    expect(response.status).toEqual(200);
+                    expect(response.text).toBe('<img src="http://localhost:3000/public/fjord_200.jpg" />');
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+});
+describe('Image Process', function () {
     describe('add image', function () {
         it('Image exist in my public folder', function () { return __awaiter(void 0, void 0, void 0, function () {
             var imageProcess, _a;
