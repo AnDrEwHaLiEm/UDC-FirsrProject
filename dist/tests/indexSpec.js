@@ -1,27 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -62,72 +39,48 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var supertest_1 = __importDefault(require("supertest"));
-var index_1 = __importDefault(require("../index"));
-var myfun = __importStar(require("../index"));
-var request = (0, supertest_1.default)(index_1.default);
-describe("Image Project", function () {
-    describe("add image", function () {
-        it("image is exist", function () { return __awaiter(void 0, void 0, void 0, function () {
-            var response;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, request.get("/image/fjord.jpg/200")];
-                    case 1:
-                        response = _a.sent();
-                        expect(response.status).toBe(200);
-                        expect(response.text).toBe('<img src="http://localhost:3000/public/fjord_200.jpg" />');
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        it("image isn't exist", function () { return __awaiter(void 0, void 0, void 0, function () {
-            var response;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, request.get("/image/not found image.jpg/200")];
-                    case 1:
-                        response = _a.sent();
-                        expect(response.status).toBe(404);
-                        expect(response.text).toBe("Not found");
-                        return [2 /*return*/];
-                }
-            });
-        }); });
-        it("Image exist in my public folder", function () { return __awaiter(void 0, void 0, void 0, function () {
-            var _a;
+var ImageProcess_1 = __importDefault(require("../utilities/ImageProcess"));
+describe('Image Project', function () {
+    describe('add image', function () {
+        it('Image exist in my public folder', function () { return __awaiter(void 0, void 0, void 0, function () {
+            var imageProcess, _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
+                        imageProcess = new ImageProcess_1.default('palmtunnel.jpg', 400);
                         _a = expect;
-                        return [4 /*yield*/, myfun.checkPhotoExistInPublicFolder("palmtunnel_400.jpg")];
+                        return [4 /*yield*/, imageProcess.checkPhotoExistInPublicFolder()];
                     case 1:
                         _a.apply(void 0, [_b.sent()]).toBe(true);
                         return [2 /*return*/];
                 }
             });
         }); });
-        it("Image Not exist in my public folder", function () { return __awaiter(void 0, void 0, void 0, function () {
-            var _a;
+        it('Image Not exist in my public folder', function () { return __awaiter(void 0, void 0, void 0, function () {
+            var imageProcess, _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
+                        imageProcess = new ImageProcess_1.default('~!@$%&*()(*&^%$).jpg', 400);
                         _a = expect;
-                        return [4 /*yield*/, myfun.checkPhotoExistInPublicFolder("~!@$%&*()(*&^%$).jpg")];
+                        return [4 /*yield*/, imageProcess.checkPhotoExistInPublicFolder()];
                     case 1:
                         _a.apply(void 0, [_b.sent()]).toBe(false);
                         return [2 /*return*/];
                 }
             });
         }); });
-        it("Make file name", function () {
-            expect(myfun.MakeImageName(200, "Andrew.jpg")).toBe("Andrew_200.jpg");
+        it('Make file name', function () {
+            var imageProcess = new ImageProcess_1.default('Andrew.jpg', 200);
+            expect(imageProcess.getImageName()).toBe('Andrew_200.jpg');
         });
-        it("Process Image exist", function () { return __awaiter(void 0, void 0, void 0, function () {
-            var _a, state, text;
+        it('Process Image exist', function () { return __awaiter(void 0, void 0, void 0, function () {
+            var imageProcess, _a, state, text;
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0: return [4 /*yield*/, myfun.processeImage("fjord.jpg", "fjord_200.jpg", 200)];
+                    case 0:
+                        imageProcess = new ImageProcess_1.default('fjord.jpg', 200);
+                        return [4 /*yield*/, imageProcess.processeImage()];
                     case 1:
                         _a = _b.sent(), state = _a.state, text = _a.text;
                         expect(text).toBe('<img src="http://localhost:3000/public/fjord_200.jpg" />');
@@ -136,11 +89,13 @@ describe("Image Project", function () {
                 }
             });
         }); });
-        it("Process Image Not exist", function () { return __awaiter(void 0, void 0, void 0, function () {
-            var _a, state, text;
+        it('Process Image Not exist', function () { return __awaiter(void 0, void 0, void 0, function () {
+            var imageProcess, _a, state, text;
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0: return [4 /*yield*/, myfun.processeImage("~!@$%&*()(*&^%$).jpg", "~!@$%&*()(*&^%$).jpg_200.jpg", 200)];
+                    case 0:
+                        imageProcess = new ImageProcess_1.default('~!@$%&*()(*&^%$).jpg', 200);
+                        return [4 /*yield*/, imageProcess.processeImage()];
                     case 1:
                         _a = _b.sent(), state = _a.state, text = _a.text;
                         expect(text).toBe('Not found');
